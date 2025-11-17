@@ -1,12 +1,16 @@
 # LTV calculator
 
-Simply calculator to get the following properties.
+SaaS metrics calculator for calculating the following properties:
 
-- LTV
-- Average duration
-- ARPU (Average Revenue Per User)
+- **LTV** (Lifetime Value)
+- **MRR** / **ARR** (Monthly/Annual Recurring Revenue)
+- **Churn Rate** (Customer & Revenue)
+- **NRR** / **GRR** (Net/Gross Revenue Retention)
+- **Cohort Retention**
+- **ARPU** (Average Revenue Per User)
+- **Average Duration**
 
-LTV / 平均継続期間 / ARPU(Average Revenue Per User)を計算するライブラリです。
+SaaSビジネスに必要な各種指標を計算するライブラリです。Stripe等から取得したデータを元に、LTV・MRR・チャーンレート・NRR/GRR・コホート分析などを簡単に計算できます。
 
 ## Motivation blog post: 計算式参考
 
@@ -22,7 +26,103 @@ https://www.npmjs.com/package/ltv-calculator
 $ npm i -S ltv-calculator
 ```
 
-## Usaage
+## Usage
+
+### MRR (Monthly Recurring Revenue) / ARR (Annual Recurring Revenue)
+
+```typescript
+import LTVCalculator from 'ltv-calculator'
+const client = new LTVCalculator()
+
+// MRRを計算
+// Calculate MRR from subscriptions
+const subscriptions = [
+  { amount: 1000, interval: 'month' },  // 月次: 1000円
+  { amount: 12000, interval: 'year' },  // 年次: 12000円/年 = 1000円/月
+  { amount: 100, interval: 'week' }     // 週次: 100円/週
+]
+const mrr = client.calculateMRR(subscriptions)
+
+// ARRを計算 (MRR × 12)
+// Calculate ARR (MRR × 12)
+const arr = client.calculateARR(subscriptions)
+```
+
+### Churn Rate (解約率)
+
+```typescript
+import LTVCalculator from 'ltv-calculator'
+const client = new LTVCalculator()
+
+// 顧客ベースのチャーンレート
+// Customer-based churn rate
+const customerChurn = client.calculateCustomerChurnRate({
+  startCustomers: 100,
+  churnedCustomers: 5
+}) // = 5%
+
+// 収益ベースのチャーンレート（グロス）
+// Revenue-based churn rate (Gross)
+const revenueChurn = client.calculateRevenueChurnRate({
+  startMRR: 10000,
+  churnedMRR: 500,
+  contractionMRR: 200  // ダウングレードによる減少
+}) // = 7%
+```
+
+### NRR (Net Revenue Retention) / GRR (Gross Revenue Retention)
+
+```typescript
+import LTVCalculator from 'ltv-calculator'
+const client = new LTVCalculator()
+
+// NRR: 既存顧客からの収益維持率（アップグレードを含む）
+// NRR: Net Revenue Retention (includes expansion)
+const nrr = client.calculateNRR({
+  startMRR: 10000,
+  expansionMRR: 1000,    // アップグレード
+  contractionMRR: 200,   // ダウングレード
+  churnedMRR: 300        // 解約
+}) // = 105%
+
+// GRR: 既存顧客からの収益維持率（アップグレードを除く）
+// GRR: Gross Revenue Retention (excludes expansion)
+const grr = client.calculateGRR({
+  startMRR: 10000,
+  contractionMRR: 200,
+  churnedMRR: 300
+}) // = 95%
+```
+
+### Cohort Retention (コホート分析)
+
+```typescript
+import LTVCalculator from 'ltv-calculator'
+const client = new LTVCalculator()
+
+// コホート別のリテンション率を計算
+// Calculate cohort retention rates
+const retention = client.calculateCohortRetention([
+  { month: 0, customers: 100 },
+  { month: 1, customers: 90 },
+  { month: 2, customers: 85 }
+])
+// = [100, 90, 85] (%)
+```
+
+### Historical LTV
+
+```typescript
+import LTVCalculator from 'ltv-calculator'
+const client = new LTVCalculator()
+
+// 過去の顧客収益データから平均LTVを算出
+// Calculate average LTV from historical customer revenues
+const customerRevenues = [1000, 1200, 1500, 800, 2000]
+const ltv = client.calculateHistoricalLTV(customerRevenues)
+// = 1300 (average)
+```
+
 ### ARPU
 
 ```typescript
