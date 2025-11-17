@@ -1,37 +1,28 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "esnext",
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020"],
     "declaration": true,
-    "outDir": "./dist/",
-    "rootDir": "./libs/",
-    "lib": [ "esnext"],
+    "declarationMap": true,
+    "outDir": "./dist",
+
     "strict": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "alwaysStrict": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "strictNullChecks": true,
-    "pretty": true,
-    "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noEmitHelpers": true,
+    "noImplicitReturns": true,
+
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
     "importHelpers": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true
+    "types": ["vitest/globals", "node"]
   },
-  "include": [
-    "libs/"
-  ],
-  "exclude": [
-    "__tests__",
-    "docs",
-    "node_modules",
-    "./dist",
-    "./index.js",
-    "examples/"
-  ]
+  "include": ["libs/**/*"],
+  "exclude": ["node_modules", "dist", "docs", "__tests__", "**/*.test.ts", "**/*.config.ts"]
 }
