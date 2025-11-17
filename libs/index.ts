@@ -9,44 +9,44 @@ export type SubscriptionInterval = 'month' | 'year' | 'week' | 'day'
  * Subscription data for MRR calculation
  */
 export interface Subscription {
-  amount: number;
-  interval: SubscriptionInterval;
+  amount: number
+  interval: SubscriptionInterval
 }
 
 /**
  * Customer churn rate calculation input
  */
 export interface CustomerChurnInput {
-  startCustomers: number;
-  churnedCustomers: number;
+  startCustomers: number
+  churnedCustomers: number
 }
 
 /**
  * Revenue churn rate calculation input
  */
 export interface RevenueChurnInput {
-  startMRR: number;
-  churnedMRR: number;
-  contractionMRR?: number;
+  startMRR: number
+  churnedMRR: number
+  contractionMRR?: number
 }
 
 /**
  * NRR (Net Revenue Retention) calculation input
  */
 export interface NRRInput {
-  startMRR: number;
-  newMRR?: number;
-  expansionMRR?: number;
-  contractionMRR?: number;
-  churnedMRR: number;
+  startMRR: number
+  newMRR?: number
+  expansionMRR?: number
+  contractionMRR?: number
+  churnedMRR: number
 }
 
 /**
  * Cohort data point
  */
 export interface CohortDataPoint {
-  month: number;
-  customers: number;
+  month: number
+  customers: number
 }
 
 export class LTVCalculator {
@@ -69,7 +69,7 @@ export class LTVCalculator {
    * ARPUを計算する
    * @param {number} arpu
    */
-  public setARPU (arpu: number): this {
+  public setARPU(arpu: number): this {
     this.arpu = arpu
     return this
   }
@@ -81,7 +81,7 @@ export class LTVCalculator {
    * @param {number} sales 売り上げ
    * @param {number} user ユーザー数
    */
-  public calcARPU (sales: number, user: number): this {
+  public calcARPU(sales: number, user: number): this {
     const arpu = sales / user
     this.setARPU(arpu)
     return this
@@ -94,7 +94,7 @@ export class LTVCalculator {
    * @param [number] sales 売り上げ
    * @param [number] user ユーザー数
    */
-  public getARPU (sales?: number, user?: number) {
+  public getARPU(sales?: number, user?: number) {
     if (sales && user) this.calcARPU(sales, user)
     return this.arpu
   }
@@ -103,7 +103,7 @@ export class LTVCalculator {
    * 解約率をセットする
    * @param {number} rate
    */
-  public setChurnRate (rate: number): this {
+  public setChurnRate(rate: number): this {
     this.churnRate = rate
     return this
   }
@@ -111,7 +111,7 @@ export class LTVCalculator {
   /**
    * 解約率を取得する
    */
-  public getChurnRate (): number {
+  public getChurnRate(): number {
     return this.churnRate
   }
 
@@ -120,7 +120,10 @@ export class LTVCalculator {
    *
    * @param {number} churnRate
    */
-  public calcAverageDurationByChurnRate (churnRate?: number, type: NumberType = this.defaultNumberType): this {
+  public calcAverageDurationByChurnRate(
+    churnRate?: number,
+    type: NumberType = this.defaultNumberType
+  ): this {
     const rate = churnRate || this.churnRate
     this.averageDuration = type === 'percentage' ? 1 / (rate / 100) : 1 / rate
     return this
@@ -130,7 +133,7 @@ export class LTVCalculator {
    * 平均継続期間を取得する
    * 1 / (churn rate(%) * 100)
    */
-  public getAverageDurationByChurnRate (churnRate?: number, type?: NumberType): number {
+  public getAverageDurationByChurnRate(churnRate?: number, type?: NumberType): number {
     if (churnRate) this.calcAverageDurationByChurnRate(churnRate, type)
     return this.averageDuration
   }
@@ -139,7 +142,7 @@ export class LTVCalculator {
    * 平均継続期間をセットする
    * @param {number} duration
    */
-  public setAverageDuration (duration: number): this {
+  public setAverageDuration(duration: number): this {
     this.averageDuration = duration
     return this
   }
@@ -147,7 +150,7 @@ export class LTVCalculator {
   /**
    * LTVを計算する
    */
-  public calcLTV (averageDuration?: number, arpu?: number): this {
+  public calcLTV(averageDuration?: number, arpu?: number): this {
     this.ltv = (averageDuration || this.averageDuration) * (arpu || this.arpu)
     return this
   }
@@ -156,7 +159,7 @@ export class LTVCalculator {
    * LTVを取得する
    * Average duration * ARPU = LTV
    */
-  public getLTV (averageDuration?: number, arpu?: number): number {
+  public getLTV(averageDuration?: number, arpu?: number): number {
     this.calcLTV(averageDuration, arpu)
     return this.ltv
   }
@@ -168,18 +171,18 @@ export class LTVCalculator {
    * @param {Subscription[]} subscriptions - サブスクリプションの配列
    * @returns {number} MRR
    */
-  public calculateMRR (subscriptions: Subscription[]): number {
+  public calculateMRR(subscriptions: Subscription[]): number {
     return subscriptions.reduce((total, sub) => {
       const { amount, interval } = sub
       switch (interval) {
         case 'month':
           return total + amount
         case 'year':
-          return total + (amount / 12)
+          return total + amount / 12
         case 'week':
-          return total + (amount * 52 / 12)
+          return total + (amount * 52) / 12
         case 'day':
-          return total + (amount * 365 / 12)
+          return total + (amount * 365) / 12
         default:
           return total
       }
@@ -193,7 +196,7 @@ export class LTVCalculator {
    * @param {Subscription[]} subscriptions - サブスクリプションの配列
    * @returns {number} ARR
    */
-  public calculateARR (subscriptions: Subscription[]): number {
+  public calculateARR(subscriptions: Subscription[]): number {
     return this.calculateMRR(subscriptions) * 12
   }
 
@@ -204,7 +207,7 @@ export class LTVCalculator {
    * @param {CustomerChurnInput} input - 顧客チャーン計算の入力
    * @returns {number} チャーンレート (%)
    */
-  public calculateCustomerChurnRate (input: CustomerChurnInput): number {
+  public calculateCustomerChurnRate(input: CustomerChurnInput): number {
     const { startCustomers, churnedCustomers } = input
     if (startCustomers === 0) return 0
     return (churnedCustomers / startCustomers) * 100
@@ -217,7 +220,7 @@ export class LTVCalculator {
    * @param {RevenueChurnInput} input - 収益チャーン計算の入力
    * @returns {number} グロス収益チャーンレート (%)
    */
-  public calculateRevenueChurnRate (input: RevenueChurnInput): number {
+  public calculateRevenueChurnRate(input: RevenueChurnInput): number {
     const { startMRR, churnedMRR, contractionMRR = 0 } = input
     if (startMRR === 0) return 0
     return ((churnedMRR + contractionMRR) / startMRR) * 100
@@ -231,7 +234,7 @@ export class LTVCalculator {
    * @param {NRRInput} input - NRR計算の入力
    * @returns {number} NRR (%)
    */
-  public calculateNRR (input: NRRInput): number {
+  public calculateNRR(input: NRRInput): number {
     const { startMRR, expansionMRR = 0, contractionMRR = 0, churnedMRR } = input
     if (startMRR === 0) return 0
     const endMRR = startMRR + expansionMRR - contractionMRR - churnedMRR
@@ -246,7 +249,7 @@ export class LTVCalculator {
    * @param {NRRInput} input - GRR計算の入力
    * @returns {number} GRR (%)
    */
-  public calculateGRR (input: NRRInput): number {
+  public calculateGRR(input: NRRInput): number {
     const { startMRR, contractionMRR = 0, churnedMRR } = input
     if (startMRR === 0) return 0
     const retainedMRR = startMRR - contractionMRR - churnedMRR
@@ -260,7 +263,7 @@ export class LTVCalculator {
    * @param {CohortDataPoint[]} cohorts - コホートデータの配列（月次の顧客数）
    * @returns {number[]} 各月のリテンションレート (%)
    */
-  public calculateCohortRetention (cohorts: CohortDataPoint[]): number[] {
+  public calculateCohortRetention(cohorts: CohortDataPoint[]): number[] {
     if (cohorts.length === 0) return []
 
     // month順でソート
@@ -269,7 +272,7 @@ export class LTVCalculator {
 
     if (baseCustomers === 0) return sortedCohorts.map(() => 0)
 
-    return sortedCohorts.map(cohort => (cohort.customers / baseCustomers) * 100)
+    return sortedCohorts.map((cohort) => (cohort.customers / baseCustomers) * 100)
   }
 
   /**
@@ -279,7 +282,7 @@ export class LTVCalculator {
    * @param {number[]} customerRevenues - 各顧客の累積収益の配列
    * @returns {number} 平均LTV
    */
-  public calculateHistoricalLTV (customerRevenues: number[]): number {
+  public calculateHistoricalLTV(customerRevenues: number[]): number {
     if (customerRevenues.length === 0) return 0
     const total = customerRevenues.reduce((sum, revenue) => sum + revenue, 0)
     return total / customerRevenues.length

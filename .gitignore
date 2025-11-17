@@ -5,4 +5,7 @@ coverage/
 .idea/
 dist/
 examples/
-.rpt2_cache/
+
+# Vite
+.vite
+*.local
