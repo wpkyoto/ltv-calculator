@@ -50,6 +50,11 @@ export interface CohortDataPoint {
 }
 
 export class LTVCalculator {
+  // Subscription interval conversion constants
+  private static readonly MONTHS_PER_YEAR = 12
+  private static readonly WEEKS_PER_YEAR = 52
+  private static readonly DAYS_PER_YEAR = 365
+
   // パーセントか実数かのデフォルト設定
   private readonly defaultNumberType: NumberType = 'percentage'
 
@@ -178,11 +183,11 @@ export class LTVCalculator {
         case 'month':
           return total + amount
         case 'year':
-          return total + amount / 12
+          return total + amount / LTVCalculator.MONTHS_PER_YEAR
         case 'week':
-          return total + (amount * 52) / 12
+          return total + (amount * LTVCalculator.WEEKS_PER_YEAR) / LTVCalculator.MONTHS_PER_YEAR
         case 'day':
-          return total + (amount * 365) / 12
+          return total + (amount * LTVCalculator.DAYS_PER_YEAR) / LTVCalculator.MONTHS_PER_YEAR
         default:
           return total
       }
@@ -197,7 +202,7 @@ export class LTVCalculator {
    * @returns {number} ARR
    */
   public calculateARR(subscriptions: Subscription[]): number {
-    return this.calculateMRR(subscriptions) * 12
+    return this.calculateMRR(subscriptions) * LTVCalculator.MONTHS_PER_YEAR
   }
 
   /**
