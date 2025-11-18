@@ -49,7 +49,7 @@
   "np": {
     "yarn": false,
     "contents": "dist",
-    "testScript": "npm run test && npm run lint && npm run typecheck"
+    "testScript": "test && lint && typecheck"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
