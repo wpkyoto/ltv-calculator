@@ -49,7 +49,6 @@
   },
   "np": {
     "yarn": false,
-    "contents": "dist",
     "testScript": "test:ci"
   },
   "devDependencies": {
