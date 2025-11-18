@@ -12,9 +12,7 @@
       "require": "./dist/index.js"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly --declaration --outDir dist",
     "tsc": "tsc",
@@ -22,6 +20,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
+    "test:ci": "npm run test && npm run lint && npm run typecheck",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
@@ -31,9 +30,7 @@
     "prepublishOnly": "npm run build",
     "release": "np"
   },
-  "keywords": [
-    "ltv"
-  ],
+  "keywords": ["ltv"],
   "bugs": {
     "url": "https://github.com/hideokamoto/ltv-calculator/issues"
   },
@@ -49,7 +46,7 @@
   "np": {
     "yarn": false,
     "contents": "dist",
-    "testScript": "npm run test && npm run lint && npm run typecheck"
+    "testScript": "test:ci"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
