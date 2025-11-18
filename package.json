@@ -1,6 +1,6 @@
 {
   "name": "ltv-calculator",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Simply LTV / ARPU / Average Duration calcurator",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -12,7 +12,9 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly --declaration --outDir dist",
     "tsc": "tsc",
@@ -30,7 +32,9 @@
     "prepublishOnly": "npm run build",
     "release": "np"
   },
-  "keywords": ["ltv"],
+  "keywords": [
+    "ltv"
+  ],
   "bugs": {
     "url": "https://github.com/hideokamoto/ltv-calculator/issues"
   },
