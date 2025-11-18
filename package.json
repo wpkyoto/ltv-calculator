@@ -28,7 +28,8 @@
     "typecheck": "tsc --noEmit",
     "doc": "typedoc",
     "doc:dev": "concurrently \"typedoc --watch\" \"serve docs -l 3000\"",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "release": "np"
   },
   "keywords": [
     "ltv"
@@ -45,6 +46,11 @@
   "publishConfig": {
     "access": "public"
   },
+  "np": {
+    "yarn": false,
+    "contents": "dist",
+    "testScript": "npm run test && npm run lint && npm run typecheck"
+  },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/node": "^22.10.2",
@@ -52,6 +58,7 @@
     "concurrently": "^9.1.0",
     "serve": "^14.2.4",
     "tslib": "^2.8.1",
+    "np": "^9.2.0",
     "typedoc": "^0.26.0",
     "typescript": "^5.7.2",
     "vite": "^7.2.2",
