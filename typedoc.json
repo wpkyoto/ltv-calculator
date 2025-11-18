@@ -1,0 +1,13 @@
+{
+  "entryPoints": ["libs/index.ts"],
+  "out": "docs",
+  "tsconfig": "tsconfig.json",
+  "name": "ltv-calculator",
+  "readme": "README.md",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeInternal": true,
+  "theme": "default"
+}
+
