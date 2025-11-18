@@ -12,9 +12,7 @@
       "require": "./dist/index.js"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly --declaration --outDir dist",
     "tsc": "tsc",
@@ -32,9 +30,7 @@
     "prepublishOnly": "npm run build",
     "release": "np"
   },
-  "keywords": [
-    "ltv"
-  ],
+  "keywords": ["ltv"],
   "bugs": {
     "url": "https://github.com/hideokamoto/ltv-calculator/issues"
   },
