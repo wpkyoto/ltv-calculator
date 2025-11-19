@@ -61,7 +61,7 @@ const DAYS_PER_YEAR = 365
  * @returns {number} ARPU
  */
 export function calculateARPU(sales: number, users: number): number {
-  return sales / users
+  return users === 0 ? 0 : sales / users
 }
 
 /**
