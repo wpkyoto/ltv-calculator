@@ -68,7 +68,7 @@ export function calculateARPU(sales: number, users: number): number {
  * Calculate average customer duration from churn rate
  * @param {number} churnRate - Churn rate (percentage by default, or decimal number)
  * @param {NumberType} type - 'percentage' or 'number' (default: 'percentage')
- * @returns {number} Average duration
+ * @returns {number} Average duration. Returns `Infinity` if `churnRate` is 0.
  */
 export function calculateAverageDuration(
   churnRate: number,
